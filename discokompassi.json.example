@@ -1,0 +1,28 @@
+{
+  "discord_token": "",
+  "kompassi_user": "",
+  "kompassi_pass": "",
+  "events": [
+    "tracon2024"
+  ],
+  "rolemaps": {
+    "tracon2023/Coniitti": [
+      {
+        "guild": 123
+        "role": 123
+      }
+    ],
+    "tracon2024/Coniitti": [
+      {
+        "guild": 123,
+        "role": 123,
+      }
+    ]
+  },
+  "admin_roles": [
+    123
+  ],
+  "superadmin": [
+    123
+  ]
+}
