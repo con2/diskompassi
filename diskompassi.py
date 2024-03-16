@@ -4,12 +4,12 @@ import discord
 import requests
 
 def get_config() -> dict:
-    f = open("discokompassi.json","r")
+    f = open("diskompassi.json","r")
     j = json.load(f)
     f.close()
     return j
 
-class DiscoKompassi(discord.Client):
+class Diskompassi(discord.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.config = get_config()
@@ -18,7 +18,7 @@ class DiscoKompassi(discord.Client):
         self.import_kompassi_roles.start()
 
     def save_config(self) -> None:
-        f = open("discokompassi.json","w")
+        f = open("diskompassi.json","w")
         json.dump(self.config, f, indent=2)
         f.close()
         print("Saved config")
@@ -101,14 +101,19 @@ class DiscoKompassi(discord.Client):
     async def import_kompassi_roles(self):
         for e in self.config['events']:
             res = requests.get("https://kompassi.eu/api/v1/events/{}/discord".format(e), auth=(self.config['kompassi_user'], self.config['kompassi_pass']))
-            j = res.json() # [{"handle": "japsu", "roles": ["Coniitti"]}]
+            try:
+                j = res.json() # [{"handle": "japsu", "roles": ["Coniitti"]}]
+            except:
+                print("Failed when parsing json. Received:")
+                print(res.text)
+                continue
             #TESTJSON = '[{"handle": "fwe", "roles": ["Coniitti"]}]'
             #j = json.loads(TESTJSON)
             for row in j:
                 for role in row['roles']:
                     roleid = "{}/{}".format(e, role)
                     if(roleid not in self.config['rolemaps']):
-                        print("Warning: No mapping for", roleid)
+                        # print("Warning: No mapping for", roleid)
                         continue
 
                     for role_mapping in self.config['rolemaps'][roleid]:
@@ -136,5 +141,5 @@ intents.message_content = True
 intents.members = True
 
 config = get_config()
-client = DiscoKompassi(intents=intents)
+client = Diskompassi(intents=intents)
 client.run(config['discord_token'])
