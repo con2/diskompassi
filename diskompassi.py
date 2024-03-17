@@ -126,7 +126,7 @@ class Diskompassi(discord.Client):
                             print("Error: Server {} does not have role {}".format(role_mapping['guild'], role_mapping['role']))
                         # Cannot use guild.get_member_named, because the lookup order is..non-ideal.
                         for m in guild.members:
-                            if(m.name == row['handle']):
+                            if(m.name == row['handle'].lower()):
                                 if not m.get_role(role_mapping['role']):
                                     print("Assigning {} to {}".format(roleid, row['handle']))
                                     await m.add_roles(role, reason = "Kompassi import")
